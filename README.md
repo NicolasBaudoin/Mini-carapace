@@ -5,9 +5,10 @@
 - [Minishell](#minishell)
 	- [Description](#description)
 	- [Instructions](#instructions)
-	- [Resources ](#resources-)
+	- [Resources](#resources)
 - [Temporary part](#temporary-part)
 	- [Checklist / todolist](#checklist--todolist)
+	- [branch management](#branch-management)
 	- [Build](#build)
 		- [Makefile](#makefile)
 	- [test](#test)
@@ -22,9 +23,9 @@ Learn about : processes and file descriptiors
 
 ## Instructions
 
-## Resources </br></br></br>
+## Resources
 
-
+- [conventional branch](https://conventional-branch.github.io/)</br></br></br>
 
 # Temporary part
 
@@ -59,6 +60,20 @@ Learn about : processes and file descriptiors
   - [ ] edge cases to test
   - [ ] comparaison testing
   - [ ] memory leaks
+
+
+## branch management
+
+what's the diffrent branch :
+
+- **main** : default branch, where the project must stay stable and norm proof
+- **dev** : where we prepare a release on main (dev can be called release)
+
+optional :
+- **chore/**[anyname] : when it's not about code
+- **feat/** when we work on a new features exemple : feat/echo or feat/parse_empty_args
+- **fix/** when we need to fix a problem and do magic stuff exemple : fix/input_quoteception
+- (not necessary here) **hotfix/** to do urgent fix or bugfix or quick fix.
 
 ## Build
 
