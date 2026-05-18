@@ -6,11 +6,11 @@
 #    By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/05/08 18:00:19 by nbaudoin          #+#    #+#              #
-#    Updated: 2026/05/18 12:06:08 by nbaudoin         ###   ########.fr        #
+#    Updated: 2026/05/18 15:16:06 by nbaudoin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = Minishell
+NAME = minishell
 
 CC := cc
 CFLAGS := -Wall -Werror -Wextra
