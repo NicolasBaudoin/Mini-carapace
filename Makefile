@@ -1,74 +1,82 @@
-#COLORS
-GREEN		= \033[0;32m
-RED 		= \033[0;31m
-BOLD		= \033[1m
-NORMAL		= \033[0m
-UP 			= \033[A
-CUT 		= \033[K
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/05/08 18:00:19 by nbaudoin          #+#    #+#              #
+#    Updated: 2026/05/18 12:06:08 by nbaudoin         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-#OUTPUT
-NAME		= minishell
+NAME = Minishell
 
-#FILES
-LIBFT		= $(LIBFT_DIR)libft.a
-LIBFT_DIR	= ./libft/
+CC := cc
+CFLAGS := -Wall -Werror -Wextra
 
-HEADS_LIST	= minishell.h
-HEADS_DIR	= ./incs/
-HEADS		= $(addprefix $(HEADERS_DIRECTORY), $(HEADERS_LIST))
+cyan = /bin/echo -e "\x1b[36m\#\# $1\x1b[0m"
 
-SRCS_DIR	= ./srcs/
-SRCS_FILES	= main.c parse.c signals.c utils.c echo.c env.c pwd.c exit.c builtins.c env_utils.c export.c export_utils.c unset.c cd.c cd_utils.c sort_export.c heredoc.c path_cmd.c init.c utils2.c utils3.c utils4.c utils5.c utils6.c
-SRCS		:= ${addprefix ${SRCS_DIR}, ${SRCS_FILES}}
 
-OBJS_DIR	= ./objs/
-OBJS_FILES	:= ${SRCS_FILES:.c=.o}
-OBJS		:= ${addprefix ${OBJS_DIR}, ${OBJS_FILES}}
+# ====== files ======
 
-LDFLAGS		= -lreadline -L/Users/lfabbian/.brew/opt/readline/lib
-#LDFLAGS		= -lreadline -L .brew/opt/readline/lib -I .brew/opt/readline/include
+LEXER_DIR = src/lexer
+PARSE_DIR = src/parser
+UTILS_DIR = src/utils
 
-#COMMANDS
-CC			= gcc
-CFLAGS		= -Wall -Wextra -Werror
-AR			= ar rcs
-MKDIR		= mkdir -p
-RM			= rm -rf
-LIBS		= -lft -L$(LIBFT_DIR)
-INCS		= -I$(HEADS_DIR) -I$(LIBFT_HEADS)
+LEXER_FILES = ${LEXER_DIR}/lexer.c ${LEXER_DIR}/token.c ${LEXER_DIR}/operator.c \
+			${LEXER_DIR}/norme.c
+PARSE_FILES =
+UTILS_FILES = ${UTILS_DIR}/ft_strndup.c ${UTILS_DIR}/detect_char_type.c \
+		${UTILS_DIR}/detect_type.c
+SRC_FILES = main.c
 
-all: ${NAME}
+SRCS = ${SRC_FILES} ${LEXER_FILES} ${UTILS_FILES} ${PARSE_FILES} src/signals.c
+LIBFT_DIR := libft
+OBJ_DIR = obj
+LIBFT_DIR := libft
+# OBJECT rule
+OBJ := ${SRCS:%.c=${OBJ_DIR}/%.o}
 
-#Compile normal executable
-${NAME}: ${LIBFT} ${OBJS_DIR} ${OBJS}
-	@${CC} -g ${CFLAGS} ${LIBS} ${INCS} ${OBJS} -o ${NAME} ${LDFLAGS}
-	@echo "$(GREEN)[$(BOLD)OK$(NORMAL)$(GREEN)]$(NORMAL) created and compiled object files"
-	@echo "$(GREEN)[$(BOLD)OK$(NORMAL)$(GREEN)]$(NORMAL) $(BOLD)$(NAME)$(NORMAL) is ready"
+# Includes and Libs
+INCLUDES :=	-I ${INCLUDE_DIR} \
+			-I ${LIBFT_DIR} \
+			${READLINE_INCLUDE}
 
-#Create objects directory
-${OBJS_DIR}:
-	@${MKDIR} ${OBJS_DIR}
+LIBS := -L ${LIBFT_DIR} -lft \
 
-#Compile normals objects
-${OBJS_DIR}%.o: ${SRCS_DIR}%.c
-	@echo "$(RED)[$(BOLD)Compiling$(NORMAL)$(RED)]$(NORMAL) $<$(UP)$(CUT)"
-	@${CC} -g ${CFLAGS} ${INCS} -I/Users/lfabbian/.brew/opt/readline/include -o $@ -c $<
+LIBFT = ${LIBFT_DIR}/libft.a
 
-${LIBFT}:
-	@make -C ${LIBFT_DIR}
+all: $(NAME)
+	@$(call cyan,"Compilation done !")
 
-#Clean obj files
+${NAME} : ${OBJ} ${LIBFT}
+	@$(CC) $(CFLAGS) $(OBJ) ${LIBFT} -lreadline -o $(NAME)
+	@$(call cyan,"Creating Mishell...")
+
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+
+$(LIBFT_DIR):
+	@git clone $(LIBFT_REPO) $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR)
+
+${LIBFT} :
+	${MAKE} -C ${LIBFT_DIR}
+
 clean:
-	@make -C ${LIBFT_DIR} clean
-	@${RM} ${OBJS_DIR}
-	@echo "$(GREEN)[$(BOLD)OK$(NORMAL)$(GREEN)]$(NORMAL) object files deleted"
+	@$(call cyan,"Cleaning .o files...")
+	@rm -rf $(OBJ_DIR)
+	${MAKE} -C ${LIBFT_DIR} clean
+	@$(call cyan,"All .o files are removed !")
 
-#Clean objs files and name
-fclean:	clean
-	@${RM} ${LIBFT}
-	@${RM} ${NAME}
-	@echo "$(GREEN)[$(BOLD)OK$(NORMAL)$(GREEN)]$(NORMAL) $(BOLD)$(NAME)$(NORMAL) deleted"
+fclean: clean
+	@$(call cyan,"Cleaning executables and .a files...")
+	@rm -f $(NAME)
+	${MAKE} -C ${LIBFT_DIR} fclean
+	@$(call cyan,"All executables and .a files are removed !")
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus
