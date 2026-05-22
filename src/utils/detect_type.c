@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   detect_type.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nbaudoin <nbaudoin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/11 19:30:40 by nbaudoin          #+#    #+#             */
-/*   Updated: 2026/05/18 14:57:59 by nbaudoin         ###   ########.fr       */
+/*   Updated: 2026/05/23 01:19:41 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "minishell.h"
 
 // to detect if it's a word
 

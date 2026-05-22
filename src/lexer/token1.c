@@ -1,0 +1,64 @@
+#include "minishell.h"
+
+t_token	*new_token(char *value, t_token_type type)
+{
+	t_token	*t;
+
+	t = malloc(sizeof(t_token));
+	if (!t)
+		return (NULL);
+	t->value = value;
+	t->type = type;
+	t->next = NULL;
+	return (t);
+}
+
+void	add_back_token(t_token **lst, t_token *new)
+{
+	t_token	*tmp;
+
+	if (!*lst)
+	{
+		*lst = new;
+		return;
+	}
+	tmp = *lst;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new;
+}
+
+int	create_token(t_token **tokens, t_lexer *lexer, t_token_info info)
+{
+	t_token	*new;
+	char	*value;
+
+	value = ft_strndup(lexer->input, info.start, info.end);
+	if (!value)
+		return (1);
+
+	new = new_token(value, info.type);
+	if (!new)
+	{
+		free(value);
+		return (1);
+	}
+	add_back_token(tokens, new);
+	return (0);
+}
+
+void	free_token(t_token **tokens)
+{
+	t_token	*curr;
+	t_token	*tmp;
+
+	curr = *tokens;
+	while (curr)
+	{
+		tmp = curr->next;
+		free(curr->value);
+		free(curr);
+		curr = tmp;
+	}
+	*tokens = NULL;
+}
